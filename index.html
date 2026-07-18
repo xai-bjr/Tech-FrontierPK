@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="icon.png">
+<title>Unit One — Verified Honest Reviews</title>
+<meta name="description" content="Verified listings and real buyer reviews. No fake ratings, just the truth.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <span class="brand-text">UNIT<span class="brand-accent">ONE</span></span>
+    </a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#product">Current Product</a>
+      <a href="#reviews">Buyer Reviews</a>
+      <a href="#write-review">Write a Review</a>
+    </nav>
+
+    <div class="auth-area" id="authArea">
+      <!-- populated by app.js: logged-out shows Sign In / Sign Up, logged-in shows Clear ID + Log Out -->
+    </div>
+  </div>
+</header>
+
+<!-- ============ SUPERUSER BAR (admin only, injected by JS) ============ -->
+<div id="superuserBar" class="superuser-bar hidden"></div>
+
+<main id="top">
+
+  <!-- ============ HERO / MAIN SHOWCASE ============ -->
+  <section class="hero" id="product">
+    <div class="hero-inner">
+
+      <div class="hero-copy">
+        <p class="eyebrow">// community verified</p>
+        <h1>Honest reviews from real buyers. Nothing else.</h1>
+        <p class="hero-sub">No fake 5-star ratings. See exactly what's good and what's bad from people who actually use the product.</p>
+        <div class="hero-actions">
+          <a href="#write-review" class="btn btn-primary">Write a Review</a>
+          <a href="#reviews" class="btn btn-ghost">Read Reviews</a>
+        </div>
+      </div>
+
+      <div class="product-panel" id="productPanel">
+        <!-- Fully populated/re-rendered by app.js showing just the Product Image, Title, and Price -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ ADMIN: PRODUCT MANAGER (hidden unless admin) ============ -->
+  <section class="admin-section hidden" id="productManagerSection">
+    <div class="section-inner">
+      <h2 class="admin-heading"><span class="dot dot-red"></span> Product Manager</h2>
+      <p class="admin-sub">Update the featured product. Changes apply globally, instantly.</p>
+      <form id="productManagerForm" class="admin-form">
+        <div class="form-row">
+          <label for="pmTitle">Product Title</label>
+          <input type="text" id="pmTitle" required minlength="3">
+        </div>
+        <div class="form-row">
+          <label for="pmImage">Image URL</label>
+          <input type="url" id="pmImage" required>
+        </div>
+        <div class="form-row">
+          <label for="pmPrice">Price (PKR)</label>
+          <input type="number" id="pmPrice" required min="1">
+        </div>
+        <!-- Laptop Specs and Condition Score have been removed to keep it purely review-focused -->
+        <button type="submit" class="btn btn-primary">Update Product</button>
+        <span class="form-confirm" id="pmConfirm"></span>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ REVIEW COMPOSITION PANEL ============ -->
+  <section class="write-review" id="write-review">
+    <div class="section-inner">
+      <h2>Leave a Review</h2>
+      <p class="section-sub">Sign in with your Clear ID to post. Real experiences only — tell us the good and the bad.</p>
+
+      <div id="reviewGate" class="review-gate">
+        <p>You need to sign in to write a review.</p>
+        <button class="btn btn-primary" id="gateSignInBtn">Sign In</button>
+      </div>
+
+      <form id="reviewForm" class="review-form hidden">
+        <div class="form-row">
+          <label>Your Rating</label>
+          <div class="star-selector" id="starSelector" role="radiogroup" aria-label="Star rating">
+            <button type="button" class="star" data-value="1" aria-label="1 star">★</button>
+            <button type="button" class="star" data-value="2" aria-label="2 stars">★</button>
+            <button type="button" class="star" data-value="3" aria-label="3 stars">★</button>
+            <button type="button" class="star" data-value="4" aria-label="4 stars">★</button>
+            <button type="button" class="star" data-value="5" aria-label="5 stars">★</button>
+          </div>
+          <input type="hidden" id="ratingValue" value="0" required>
+        </div>
+
+        <div class="form-row">
+          <label for="prosInput">✅ What's Good</label>
+          <textarea id="prosInput" rows="3" required minlength="4" placeholder="Example: Great quality, looks exactly like the pictures."></textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="consInput">❌ What's Bad</label>
+          <textarea id="consInput" rows="3" required minlength="4" placeholder="Example: Shipping took a bit longer than expected."></textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="photoInput">Attach a Photo (optional)</label>
+          <input type="file" id="photoInput" accept="image/*">
+          <span class="file-hint" id="photoHint">No file chosen</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+        <span class="form-confirm" id="reviewConfirm"></span>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ PUBLIC REVIEW FEED ============ -->
+  <section class="reviews-feed" id="reviews">
+    <div class="section-inner">
+      <div class="feed-heading-row">
+        <h2>Buyer Reviews</h2>
+        <span class="feed-count" id="feedCount">0 reviews</span>
+      </div>
+      <div id="reviewFeed" class="review-feed-grid">
+        <!-- review cards injected here by app.js -->
+      </div>
+      <p class="empty-state hidden" id="emptyState">No reviews yet. Be the first to share your experience.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="section-inner footer-inner">
+    <span>UNIT<span class="brand-accent">ONE</span> — Real experiences only.</span>
+    <span class="footer-note">Demo storefront. Data is stored locally in your browser.</span>
+  </div>
+</footer>
+
+<!-- ============ AUTH MODAL ============ -->
+<div class="modal-overlay hidden" id="authModalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">&times;</button>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="signin" id="tabSignIn">Sign In</button>
+      <button class="modal-tab" data-tab="signup" id="tabSignUp">Sign Up</button>
+    </div>
+
+    <h2 id="authModalTitle" class="sr-only">Account Access</h2>
+
+    <!-- SIGN IN -->
+    <form id="signInForm" class="auth-form">
+      <div class="form-row">
+        <label for="siClearId">Clear ID</label>
+        <input type="text" id="siClearId" required minlength="3" autocomplete="username">
+      </div>
+      <div class="form-row">
+        <label for="siPassword">Password</label>
+        <div class="password-field">
+          <input type="password" id="siPassword" required minlength="4" autocomplete="current-password">
+          <button type="button" class="pw-toggle" data-target="siPassword" aria-label="Show or hide password">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      <p class="form-error" id="signInError"></p>
+    </form>
+
+    <!-- SIGN UP -->
+    <form id="signUpForm" class="auth-form hidden">
+      <div class="form-row">
+        <label for="suName">Full Name</label>
+        <input type="text" id="suName" required minlength="2">
+      </div>
+      <div class="form-row">
+        <label for="suEmail">Email</label>
+        <input type="email" id="suEmail" required>
+      </div>
+      <div class="form-row">
+        <label for="suClearId">Clear ID (username)</label>
+        <input type="text" id="suClearId" required minlength="3" pattern="[A-Za-z0-9_]+" title="Letters, numbers, and underscores only">
+      </div>
+      <div class="form-row">
+        <label for="suPassword">Password</label>
+        <div class="password-field">
+          <input type="password" id="suPassword" required minlength="4" autocomplete="new-password">
+          <button type="button" class="pw-toggle" data-target="suPassword" aria-label="Show or hide password">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      <p class="form-error" id="signUpError"></p>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
