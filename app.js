@@ -4,7 +4,7 @@
    ========================================================= */
 
 const ADMIN_CLEAR_ID = "admin_super";
-const ADMIN_PASSWORD = "SuperuserPak2026!"; // DANGER: Visible in source code.
+const ADMIN_PASSWORD = "Super****Pak2026!"; // DANGER: Visible in source code.
 
 const STORAGE_KEYS = {
     users: "u1_users",
