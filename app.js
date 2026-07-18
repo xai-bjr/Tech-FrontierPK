@@ -2,10 +2,10 @@
    UNIT ONE — Application Engine (Full Version)
    ========================================================= */
 
-const ADMIN_CLEAR_ID = "admin_super";
-const ADMIN_PASSWORD = "SuperuserPak2026!";
-
-const STORAGE_KEYS = {
+// Load admin credentials from environment variables
+// Default values are for development only - NEVER commit real credentials
+const ADMIN_CLEAR_ID = process.env.ADMIN_CLEAR_ID || "admin_super";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "change_me_in_env";const STORAGE_KEYS = {
     users: "u1_users",
     reviews: "u1_reviews",
     product: "u1_product",
